@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Reflection</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.6;
+      color: #222;
+      background-color: #f9fafb;
+    }
+    .card {
+      background: #fff;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 160px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 1rem;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    .actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    button {
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-save {
+      background-color: #2563eb;
+      color: white;
+    }
+    .btn-save:hover {
+      background-color: #1d4ed8;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>My Website Journey Reflection</h1>
+    <p>Document your learning experience below. Your notes save automatically to your browser.</p>
+
+    <form id="reflectionForm">
+      <label for="reflectionText">Learning Experience & Three Key Points:</label>
+      <textarea id="reflectionText" placeholder="Write your reflection here..."></textarea>
+
+      <div class="actions">
+        <button type="submit" class="btn-save">Save Reflection</button>
+        <button type="button" id="clearBtn" class="btn-clear">Reset to Default</button>
+        <span id="status"></span>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'website_project_reflection';
+    const form = document.getElementById('reflectionForm');
+    const textarea = document.getElementById('reflectionText');
+    const clearBtn = document.getElementById('clearBtn');
+    const status = document.getElementById('status');
+
+    // Default three sentences covering lessons learned, challenges, and skills gained
+    const defaultReflection = 
+      "Building this website taught me how semantic HTML structure makes styling and scripting much easier to manage. " +
+      "One of my biggest challenges was debugging layout alignments across different screen sizes, which pushed me to learn responsive CSS techniques. " +
+      "Through this project, I gained practical skills in DOM manipulation and using browser localStorage to persist user data across page reloads.";
+
+    // Load saved reflection on page load, or populate with the three default sentences
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      if (savedData !== null) {
+        textarea.value = savedData;
+      } else {
+        textarea.value = defaultReflection;
+        localStorage.setItem(STORAGE_KEY, defaultReflection);
+      }
+    });
+
+    // Save reflection when form is submitted
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      localStorage.setItem(STORAGE_KEY, textarea.value);
+      showStatus('Saved to localStorage!');
+    });
+
+    // Optional: Auto-save as the user types
+    textarea.addEventListener('input', () => {
+      localStorage.setItem(STORAGE_KEY, textarea.value);
+    });
+
+    // Reset back to the three default learning points
+    clearBtn.addEventListener('click', () => {
+      textarea.value = defaultReflection;
+      localStorage.setItem(STORAGE_KEY, defaultReflection);
+      showStatus('Reset to default reflection.');
+    });
+
+    function showStatus(message) {
+      status.textContent = message;
+      setTimeout(() => {
+        status.textContent = '';
+      }, 2500);
+    }
+  </script>
+
+</body>
+</html>
